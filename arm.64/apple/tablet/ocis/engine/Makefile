@@ -17,7 +17,7 @@ build: up boot-image
 boot-image: $(ENGINE)/Containerfile.boot
 	@rm -rf "$(ENGINE_BUILD)/boot"
 	@mkdir -p "$(ENGINE_BUILD)/boot/temusrc"
-	@cp "$(TINYEMU)"/*.c "$(TINYEMU)"/*.h "$(ENGINE_BUILD)/boot/temusrc/"
+	@cp $(TINYEMU)/*.c $(TINYEMU)/*.h "$(ENGINE_BUILD)/boot/temusrc/"
 	@$(PODMAN) build --pull=never -t "$(BOOT_IMAGE)" -f "$(ENGINE)/Containerfile.boot" "$(ENGINE_BUILD)/boot"
 
 boot: build

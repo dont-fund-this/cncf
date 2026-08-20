@@ -21,13 +21,11 @@ func start() {
         print("[PAT] session already live")
         return
     }
-    if jam == nil && !prep() {
-        print("[PAT] prep() FAILED")
-        return
+    if jam == nil {
+        _ = prep()
     }
     grid.image = nil
     grid.showText = false
-    bootDef = boot()
     print("[PAT] boot config: \(bootDef.cmdline), ram=\(bootDef.ram)MB, fb=\(bootDef.fbW)x\(bootDef.fbH)")
     guard prepareMounts() else {
         print("[PAT] prepareMounts() FAILED")
