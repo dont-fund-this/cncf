@@ -1,0 +1,8 @@
+vendor: dont-fund-this
+name: fogc
+version: v0.0.1
+website_url: https://github.com/dont-fund-this/cncf
+documentation_url: https://github.com/dont-fund-this/cncf
+type: distribution
+description: "fog in c++"
+contact_email_address: bubbles@dont-fund-me.org

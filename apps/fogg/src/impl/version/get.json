@@ -1,0 +1,11 @@
+{
+  "major": "1",
+  "minor": "36",
+  "gitVersion": "v1.36.0",
+  "gitCommit": "fogr-dev",
+  "gitTreeState": "clean",
+  "buildDate": "2026-08-16T00:00:00Z",
+  "goVersion": "go1.23.0",
+  "compiler": "gc",
+  "platform": "darwin/arm64"
+}

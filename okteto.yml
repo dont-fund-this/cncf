@@ -1,0 +1,8 @@
+dev:
+  debian:
+    autocreate: true
+    image: debian:bookworm
+    command: ["bash"]
+    sync:
+      - .:/usr/src/app
+    workdir: /usr/src/app

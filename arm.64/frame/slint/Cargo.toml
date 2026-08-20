@@ -1,0 +1,15 @@
+[package]
+name = "slint_sample"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+slint = "1"
+libloading = "0.8"
+
+[build-dependencies]
+slint-build = "1"
+
+[[bin]]
+name = "slint_sample"
+path = "src/main.rs"

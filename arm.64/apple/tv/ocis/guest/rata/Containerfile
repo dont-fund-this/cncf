@@ -1,0 +1,20 @@
+FROM docker.io/library/rust:1.88.0-slim-bookworm
+RUN rustup target add riscv64gc-unknown-linux-musl
+RUN apt-get update \
+ && apt-get install -y --no-install-recommends binutils libgcc-12-dev-riscv64-cross \
+ && rm -rf /var/lib/apt/lists/*
+COPY sysroot /sysroot
+RUN ln -sf ../../lib/libc.musl-riscv64.so.1 /sysroot/usr/lib/libc.so \
+ && crt="$(rustc --print sysroot)/lib/rustlib/riscv64gc-unknown-linux-musl/lib/self-contained" \
+ && test -s "$crt/Scrt1.o" -a -s "$crt/crti.o" -a -s "$crt/crtn.o" \
+ && cp "$crt/Scrt1.o" "$crt/crti.o" "$crt/crtn.o" /sysroot/usr/lib/ \
+ && unwind="$(find /usr/lib/gcc-cross/riscv64-linux-gnu -name libgcc_eh.a -print -quit)" \
+ && test -n "$unwind" \
+ && printf 'INPUT(%s)\n' "$unwind" > /sysroot/usr/lib/libgcc_s.so
+COPY source /source
+WORKDIR /source
+ENV RUSTFLAGS="-C linker=rust-lld -C target-feature=-crt-static -C link-arg=/sysroot/usr/lib/Scrt1.o -C link-arg=/sysroot/usr/lib/crti.o -C link-arg=--dynamic-linker=/lib/ld-musl-riscv64.so.1 -C link-arg=-L/sysroot/lib -C link-arg=-L/sysroot/usr/lib -C link-arg=/sysroot/usr/lib/crtn.o -C link-arg=-e -C link-arg=_start"
+RUN cargo build --release --target riscv64gc-unknown-linux-musl \
+ && cp target/riscv64gc-unknown-linux-musl/release/rata /rata \
+ && readelf -h /rata | grep -Eq 'Entry point address: +0x[1-9a-fA-F][0-9a-fA-F]*'
+ENTRYPOINT ["/bin/cat", "/rata"]

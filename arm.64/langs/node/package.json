@@ -1,0 +1,8 @@
+{
+  "name": "node_sdk",
+  "version": "0.1.0",
+  "type": "module",
+  "dependencies": {
+    "koffi": "^2.15.1"
+  }
+}

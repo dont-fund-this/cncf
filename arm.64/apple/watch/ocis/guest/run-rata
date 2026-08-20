@@ -1,0 +1,11 @@
+#!/bin/sh
+for arg in $(cat /proc/cmdline); do
+    case "$arg" in
+        alt=*|col=*|pos=*|neg=*|neu=*|bro=*|PAT_*)
+            val=$(echo "$arg" | cut -d= -f2- | tr -d '"' | tr -d "'")
+            key=$(echo "$arg" | cut -d= -f1)
+            export "$key=$val"
+            ;;
+    esac
+done
+exec /bin/rata "$@"

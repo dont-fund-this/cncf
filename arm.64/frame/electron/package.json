@@ -1,0 +1,15 @@
+{
+  "name": "epat",
+  "version": "0.1.0",
+  "private": true,
+  "main": "src/main.js",
+  "type": "module",
+  "description": "epat",
+  "devDependencies": {
+    "@electron/packager": "^18.0.0",
+    "electron": "^29.0.0"
+  },
+  "dependencies": {
+    "koffi": "^2.15.1"
+  }
+}

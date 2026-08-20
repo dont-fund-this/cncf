@@ -1,0 +1,10 @@
+#!/bin/sh
+/bin/busybox mount -t proc proc /proc
+/bin/busybox mount -t sysfs sysfs /sys
+/bin/busybox --install -s
+echo "PROFILE-OK alpi Alpine $(cat /etc/alpine-release)"
+echo "OS-ID $(grep -m1 PRETTY_NAME /etc/os-release)"
+/bin/busybox mkdir -p /mnt/data
+/bin/busybox mount -t 9p -o trans=virtio,version=9p2000.L data /mnt/data 2>&1 && echo "9P-OK /mnt/data" || echo "9P-FAIL /mnt/data"
+/bin/busybox cat /mnt/data/types.csv
+echo "OK" > /mnt/data/alpi.txt && echo "WROTE /mnt/data/alpi.txt" || echo "WRITE-FAIL /mnt/data/alpi.txt"

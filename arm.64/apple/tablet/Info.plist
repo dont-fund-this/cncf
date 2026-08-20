@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>CFBundleDevelopmentRegion</key>
+    <string>en</string>
+    <key>CFBundleName</key>
+    <string>cncf</string>
+    <key>CFBundleDisplayName</key>
+    <string>cncf</string>
+    <key>CFBundleExecutable</key>
+    <string>pat</string>
+    <key>CFBundleIdentifier</key>
+    <string>org.dont-fund-this.tablet</string>
+    <key>CFBundlePackageType</key>
+    <string>APPL</string>
+    <key>CFBundleShortVersionString</key>
+    <string>1.0</string>
+    <key>CFBundleVersion</key>
+    <string>1</string>
+    <key>MinimumOSVersion</key>
+    <string>17.0</string>
+    <key>DTPlatformName</key>
+    <string>iphonesimulator</string>
+    <key>UIDeviceFamily</key>
+    <array>
+        <integer>2</integer>
+    </array>
+    <key>PATFb</key>
+    <string>1</string>
+    <key>PATDev</key>
+    <string>apple-tablet-alpi</string>
+    <key>PATTarget</key>
+    <string>alpi</string>
+</dict>
+</plist>

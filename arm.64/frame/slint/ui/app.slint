@@ -1,0 +1,44 @@
+import { LineEdit } from "std-widgets.slint";
+
+// The body region: fills all space above the input row. Empty for now —
+// a place to put things later. Changes when the body's content changes.
+component BodyArea inherits Rectangle {
+    // intentionally empty
+}
+
+// The input row: a single line spanning the window width. Captures text,
+// emits it on Enter, then clears. Changes when input behaviour changes.
+component InputRow inherits LineEdit {
+    callback submit(string);
+    placeholder-text: "type and press enter";
+    accepted(text) => {
+        root.submit(text);
+        self.text = "";
+    }
+}
+
+// Composition: the body fills the window, the input row sits across the
+// bottom. Changes when the window's layout changes.
+export component MainWindow inherits Window {
+    title: "bpmn";
+    preferred-width: 720px;
+    preferred-height: 520px;
+
+    callback submit(string);
+
+    VerticalLayout {
+        padding: 12px;
+        spacing: 8px;
+
+        BodyArea {
+            vertical-stretch: 1;
+        }
+
+        InputRow {
+            vertical-stretch: 0;
+            submit(text) => {
+                root.submit(text);
+            }
+        }
+    }
+}
