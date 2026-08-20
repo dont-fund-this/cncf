@@ -11,7 +11,7 @@ let bootDef = BootDef(
     cmdline: "console=hvc0 root=/dev/vda rw PAT_DEVICE=apple-watch-alpi",
     fbW: 396,
     fbH: 484,
-    ram: 16
+    ram: 32
 )
 
 func runtimeRoot() -> String {

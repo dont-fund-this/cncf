@@ -14,12 +14,6 @@ ROOTFS := $(GUEST)/dist/rootfs.ext2
 DEVTABLE := $(GUEST)/devtable.txt
 PACK_IMAGE := $(BOOT_IMAGE)
 RATA := $(GUEST)/rata/build/rata
-GUEST_LIBS := $(GUEST)/libs/build
-GUEST_LIB_NAMES := jam aui box efs fog gui lua sql tui
-SOURCE_ZIP := $(ROOT)/refs/code/code.zip
-EFS_ROOT := $(GUEST)/build/efs
-EFS_LIST := $(GUEST)/build/efs.list
-EFS_BIN := $(GUEST)/build/libefs.bin
 OUT ?= $(GUEST)/build/out
 
 .DEFAULT_GOAL := test
@@ -33,7 +27,6 @@ prepare: $(SYSROOT)/lib/ld-musl-riscv64.so.1
 	@$(MAKE) -C "$(ENGINE)" up
 	@$(MAKE) -C "$(ALPINE)" fetch
 	@$(MAKE) -C "$(GUEST)/rata" test
-	@[ ! -d "$(GUEST)/libs" ] || $(MAKE) -C "$(GUEST)/libs" test
 	@$(MAKE) -C "$(OCIS)/genext2fs" build
 	@$(MAKE) -C "$(DEPS)/diskimage" build
 	@$(MAKE) -C "$(DEPS)/tinyemu" build
@@ -50,29 +43,19 @@ boot-image:
 	@$(MAKE) -C "$(ENGINE)" boot-image
 
 $(ROOTFS): prepare boot-image $(DEVTABLE)
-	@rm -rf "$(STAGE)" "$(EFS_ROOT)"
-	@mkdir -p "$(STAGE)" "$(EFS_ROOT)/code" "$(dir $(ROOTFS))"
+	@rm -rf "$(STAGE)"
+	@mkdir -p "$(STAGE)" "$(dir $(ROOTFS))"
 	@tar -xzf "$(ALPINE_SOURCE)" -C "$(STAGE)"
 	@mkdir -p "$(STAGE)/bin" "$(STAGE)/sbin" "$(STAGE)/etc/init.d" "$(STAGE)/proc" "$(STAGE)/sys" "$(STAGE)/dev" "$(STAGE)/mnt/data"
 	@cp "$(RATA)" "$(STAGE)/bin/rata"
-	@if [ -d "$(GUEST_LIBS)" ]; then for lib in $(GUEST_LIB_NAMES); do if [ -f "$(GUEST_LIBS)/lib$$lib.so" ]; then cp "$(GUEST_LIBS)/lib$$lib.so" "$(STAGE)/bin/lib$$lib.so"; fi; done; fi
-	@if [ -f "$(SOURCE_ZIP)" ]; then cp "$(SOURCE_ZIP)" "$(EFS_ROOT)/code/code.zip"; else touch "$(EFS_ROOT)/code/code.zip"; fi
-	@printf 'code/code.zip\n' > "$(EFS_LIST)"
-	@$(MAKE) -C "$(DEVICE)/libs/efs" archive PACK_ROOT="$(EFS_ROOT)" PACK_INPUT="$(EFS_LIST)" PACK_OUTPUT="$(EFS_BIN)"
-	@cp "$(EFS_BIN)" "$(STAGE)/bin/libefs.bin"
-	@if [ -f "$(SOURCE_ZIP)" ]; then cp "$(SOURCE_ZIP)" "$(STAGE)/bin/code.zip"; else touch "$(STAGE)/bin/code.zip"; fi
 	@cp "$(GUEST)/run-rata" "$(STAGE)/bin/run-rata"
 	@cp "$(GUEST)/inittab" "$(STAGE)/etc/inittab"
 	@cp "$(GUEST)/rcS" "$(STAGE)/etc/init.d/rcS"
-	@chmod +x "$(STAGE)/bin/run-rata" "$(STAGE)/etc/init.d/rcS"
+	@chmod +x "$(STAGE)/bin/run-rata" "$(STAGE)/etc/init.d/rcS" "$(STAGE)/bin/rata"
 	@ln -sf /bin/busybox "$(STAGE)/sbin/init"
 	@test -s "$(STAGE)/etc/alpine-release"
-	@chmod +x "$(STAGE)/bin/rata"
 	@find "$(STAGE)" -name .DS_Store -delete
 	@test -x "$(STAGE)/bin/rata"
-	@if [ -d "$(GUEST_LIBS)" ]; then for lib in $(GUEST_LIB_NAMES); do [ ! -f "$(GUEST_LIBS)/lib$$lib.so" ] || test -s "$(STAGE)/bin/lib$$lib.so"; done; fi
-	@[ ! -f "$(SOURCE_ZIP)" ] || cmp "$(SOURCE_ZIP)" "$(STAGE)/bin/code.zip"
-	@test -s "$(STAGE)/bin/libefs.bin"
 	@rm -f "$(ROOTFS)"
 	@used=$$(du -sk "$(STAGE)" | awk '{print $$1}'); \
 	 head=$$((used / 4)); \
@@ -112,8 +95,6 @@ test: $(ROOTFS)
 tidy:
 	@rm -rf "$(GUEST)/build" "$(GUEST)/dist"
 	@$(MAKE) -C "$(GUEST)/rata" tidy
-	@[ ! -d "$(GUEST)/libs" ] || $(MAKE) -C "$(GUEST)/libs" tidy
 
 burn: tidy
 	@$(MAKE) -C "$(GUEST)/rata" burn
-	@[ ! -d "$(GUEST)/libs" ] || $(MAKE) -C "$(GUEST)/libs" burn
