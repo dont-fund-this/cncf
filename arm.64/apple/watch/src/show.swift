@@ -16,9 +16,6 @@ struct Show: View {
             } else {
                 VStack(spacing: 1) {
                     Text(grid.text)
-                        .font(.system(size: 7, design: .monospaced))
-                        .minimumScaleFactor(0.02)
-                        .lineLimit(50)
                         .foregroundColor(Color(red: 0, green: 229.0 / 255.0, blue: 1))
                         .multilineTextAlignment(.leading)
                         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)

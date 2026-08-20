@@ -11,7 +11,7 @@
     <key>CFBundleExecutable</key>
     <string>pat</string>
     <key>CFBundleIdentifier</key>
-    <string>dev.pat.ta-in-patr-watch-alpi</string>
+    <string>dev.pat.cncf-watch-alpi</string>
     <key>CFBundlePackageType</key>
     <string>APPL</string>
     <key>CFBundleShortVersionString</key>
